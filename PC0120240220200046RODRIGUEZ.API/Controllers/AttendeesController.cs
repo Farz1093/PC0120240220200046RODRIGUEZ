@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PC0120240220200046RODRIGUEZ.DOMAIN.Core.Entities;
 using PC0120240220200046RODRIGUEZ.DOMAIN.Core.Interfaces;
 using PC0120240220200046RODRIGUEZ.DOMAIN.Infrastructure.Repositories;
 
@@ -22,6 +23,12 @@ namespace PC0120240220200046RODRIGUEZ.API.Controllers
             return Ok(attendees);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] Attendees attendees)
+        {
+            int id = await _attendeesRepository.Insert(attendees);
+            return Ok(id);
+        }
 
 
 
