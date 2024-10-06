@@ -1,83 +1,108 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PC0120240220200046RODRIGUEZ.DOMAIN.Core.Entities;
+using PC0120240220200046RODRIGUEZ.DOMAIN.Infrastructure.Data;
 
 namespace PC0120240220200046RODRIGUEZ.API.Controllers
 {
-    public class OrganizersController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class OrganizersController : ControllerBase
     {
-        // GET: OrganizerController
-        public ActionResult Index()
+        private readonly EventManagementDbContext _context;
+
+        public OrganizersController(EventManagementDbContext context)
         {
-            return View();
+            _context = context;
         }
 
-        // GET: OrganizerController/Details/5
-        public ActionResult Details(int id)
+        // GET: api/Organizers
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Organizers>>> GetOrganizers()
         {
-            return View();
+            return await _context.Organizers.ToListAsync();
         }
 
-        // GET: OrganizerController/Create
-        public ActionResult Create()
+        // GET: api/Organizers/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Organizers>> GetOrganizers(int id)
         {
-            return View();
+            var organizers = await _context.Organizers.FindAsync(id);
+
+            if (organizers == null)
+            {
+                return NotFound();
+            }
+
+            return organizers;
         }
 
-        // POST: OrganizerController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        // PUT: api/Organizers/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutOrganizers(int id, Organizers organizers)
         {
+            if (id != organizers.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(organizers).State = EntityState.Modified;
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            catch
+            catch (DbUpdateConcurrencyException)
             {
-                return View();
+                if (!OrganizersExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return NoContent();
         }
 
-        // GET: OrganizerController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: OrganizerController/Edit/5
+        // POST: api/Organizers
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult<Organizers>> PostOrganizers(Organizers organizers)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _context.Organizers.Add(organizers);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetOrganizers", new { id = organizers.Id }, organizers);
         }
 
-        // GET: OrganizerController/Delete/5
-        public ActionResult Delete(int id)
+        // DELETE: api/Organizers/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOrganizers(int id)
         {
-            return View();
+            var organizers = await _context.Organizers.FindAsync(id);
+            if (organizers == null)
+            {
+                return NotFound();
+            }
+
+            _context.Organizers.Remove(organizers);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
-        // POST: OrganizerController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        private bool OrganizersExists(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return _context.Organizers.Any(e => e.Id == id);
         }
     }
 }
