@@ -26,11 +26,10 @@ namespace PC0120240220200046RODRIGUEZ.DOMAIN.Infrastructure.Repositories
         }
 
         public async Task<int> Insert(Attendees attendees)
-        { 
-        
+            
 
 
-        }
+       
 
 
 
