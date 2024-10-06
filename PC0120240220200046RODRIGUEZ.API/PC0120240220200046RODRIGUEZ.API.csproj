@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\PC0120240220200046RODRIGUEZ.DOMAIN\PC0120240220200046RODRIGUEZ.DOMAIN.csproj" />
   </ItemGroup>
 
