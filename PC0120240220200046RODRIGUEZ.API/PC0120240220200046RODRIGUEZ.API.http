@@ -1,0 +1,6 @@
+@PC0120240220200046RODRIGUEZ.API_HostAddress = http://localhost:5294
+
+GET {{PC0120240220200046RODRIGUEZ.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
